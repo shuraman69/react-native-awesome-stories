@@ -1,18 +1,18 @@
-# react-native-awsome-stories
+# react-native-awesome-stories
 
 A fast and optimized library for rendering stories with smooth animations and gestures. Supports story lists and an integrated player with full customization.
 
 ## Installation
 
 ```sh
-npm install react-native-awsome-stories
+npm install react-native-awesome-stories
 ```
 
 ## Usage
 
 
 ```js
-import { multiply } from 'react-native-awsome-stories';
+import { multiply } from 'react-native-awesome-stories';
 
 // ...
 

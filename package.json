@@ -1,5 +1,5 @@
 {
-  "name": "react-native-awsome-stories",
+  "name": "react-native-awesome-stories",
   "version": "0.1.0",
   "description": "A fast and optimized library for rendering stories with smooth animations and gestures. Supports story lists and an integrated player with full customization.",
   "source": "./src/index.tsx",
@@ -37,7 +37,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-awsome-stories-example",
+    "example": "yarn workspace react-native-awesome-stories-example",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
@@ -52,14 +52,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shuraman69/react-native-awsome-stories.git"
+    "url": "git+https://github.com/shuraman69/react-native-awesome-stories.git"
   },
   "author": "shuraman69 <a.fateev@yandex.ru> (https://github.com/shuraman69)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shuraman69/react-native-awsome-stories/issues"
+    "url": "https://github.com/shuraman69/react-native-awesome-stories/issues"
   },
-  "homepage": "https://github.com/shuraman69/react-native-awsome-stories#readme",
+  "homepage": "https://github.com/shuraman69/react-native-awesome-stories#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -81,7 +81,7 @@
     "react-native": "0.76.7",
     "react-native-builder-bob": "^0.37.0",
     "release-it": "^17.10.0",
-    "typescript": "^5.2.2"
+    "typescript": "^4.9.3"
   },
   "resolutions": {
     "@types/react": "^18.2.44"

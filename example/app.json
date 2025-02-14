@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "awsomestories.example"
+      "bundleIdentifier": "awesomestories.example"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "awsomestories.example"
+      "package": "awesomestories.example"
     },
     "web": {
       "favicon": "./assets/favicon.png"
