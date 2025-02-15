@@ -370,13 +370,7 @@ const ProgressBarItem = memo(
     progressStyles: DefaultStyle;
   }) => {
     return (
-      <Box
-        key={index}
-        flex={1}
-        height={2}
-        gap={'x4'}
-        backgroundColor={'backgroundQuaternary'}
-      >
+      <Box key={index} flex={1} height={2} backgroundColor={'gray'}>
         <AnimatedBox
           style={[
             {

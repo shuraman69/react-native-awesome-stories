@@ -23,6 +23,7 @@ export const StoriesProvider = ({ children }: PropsWithChildren) => {
     playerConfig,
     PanGesture,
   } = useStoriesAnimations();
+
   const contextValue = useMemo(
     () => ({
       opened: playerOpened,
@@ -44,6 +45,7 @@ export const StoriesProvider = ({ children }: PropsWithChildren) => {
         height: '100%',
         overflow: 'hidden',
         width: '100%',
+        paddingTop: 50,
       },
       animatedStyle,
     ],

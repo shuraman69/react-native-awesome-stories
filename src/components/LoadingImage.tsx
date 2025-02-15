@@ -13,14 +13,15 @@ import {
 } from 'react-native-reanimated';
 import { isEqual } from 'lodash';
 import { AnimatedBox } from './Box';
+import { SkeletonLoader } from './Skeleton';
 
 export const LoadingImage = memo(
   ({
     source,
     width,
     height,
-    // loaderWidth,
-    // loaderHeight,
+    loaderWidth = 20,
+    loaderHeight = 20,
     ...props
   }: {
     width?: number;
@@ -50,11 +51,14 @@ export const LoadingImage = memo(
       <>
         <AnimatedBox
           style={[
-            { position: 'absolute', backgroundColor: 'gray', zIndex: 1000 },
+            {
+              position: 'absolute',
+              zIndex: 1,
+            },
             loaderStyles,
           ]}
         >
-          {/*<Skeleton style={{ width: loaderWidth, height: loaderHeight }} />*/}
+          <SkeletonLoader width={loaderWidth} height={loaderHeight} />
         </AnimatedBox>
         <Image
           source={source}
