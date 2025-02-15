@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, SafeAreaView, StyleSheet } from 'react-native';
 import { AnimatedBox, Box } from '../Box';
 import { Row } from '../Row';
 import { Constants, IS_IOS, SIZE } from '../../config';
@@ -145,7 +145,7 @@ export const StoriesPlayer = ({
     };
   }, []);
   return (
-    <Box flex={1}>
+    <SafeAreaView style={{ flex: 1 }}>
       <GestureDetector
         gesture={Gesture.Simultaneous(
           Gesture.Tap().onEnd((event) => {
@@ -176,7 +176,7 @@ export const StoriesPlayer = ({
           />
         </Box>
       </GestureDetector>
-    </Box>
+    </SafeAreaView>
   );
 };
 
@@ -324,7 +324,7 @@ const Item = memo(
         ]}
       >
         <Row
-          gap={'x1'}
+          gap={Constants.SPACING}
           paddingHorizontal={Constants.SPACING}
           paddingTop={Constants.SPACING * 6}
           marginTop={Constants.SPACING * 2}
