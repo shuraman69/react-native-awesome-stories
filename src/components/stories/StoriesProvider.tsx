@@ -75,6 +75,9 @@ export const StoriesProvider = memo(
                 renderContent={
                   playerConfig.current.renderContent || defaultRenderContent
                 }
+                onStoryStepIndexChange={
+                  playerConfig.current.onStoryStepIndexChange
+                }
               />
             ) : (
               <></>

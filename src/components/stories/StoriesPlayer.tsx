@@ -41,8 +41,10 @@ import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
 
 export const StoriesPlayer = ({
   renderContent,
+  onStoryStepIndexChange,
 }: {
   renderContent: StoriesConfigType['renderContent'];
+  onStoryStepIndexChange?: StoriesConfigType['onStoryStepIndexChange'];
 }) => {
   const { closeStories, initialStoryIndex, storiesLinkedList, storiesLength } =
     useStoriesPlayer();
@@ -144,6 +146,17 @@ export const StoriesPlayer = ({
       );
     };
   }, []);
+
+  useEffect(() => {
+    if (current) {
+      onStoryStepIndexChange?.({
+        item: current,
+        storyIndex: currentStoryIndex,
+        stepIndex: currentStepIndex,
+      });
+    }
+  }, [currentStepIndex, currentStoryIndex]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureDetector

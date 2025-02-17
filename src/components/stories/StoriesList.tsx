@@ -64,9 +64,6 @@ export const StoriesList = memo(
         keyExtractor={keyExtractor}
         horizontal
         showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        snapToInterval={Constants.SLIDER_CARD_W + Constants.SPACING * 5}
-        decelerationRate={'fast'}
         contentContainerStyle={{
           paddingHorizontal: Constants.SPACING * 5,
         }}

@@ -32,6 +32,11 @@ export type StoryStepType = {
 
 export type StoriesConfigType = {
   renderContent: (item: StoryStepType) => React.ReactNode;
+  onStoryStepIndexChange?: (props: {
+    item: StoryStepType;
+    storyIndex: number;
+    stepIndex: number;
+  }) => void;
 };
 
 export type StoryNode = {
