@@ -16,18 +16,17 @@ import { AnimatedBox, Box } from '../Box';
 import { Text } from '../Text';
 import { LoadingAnimation } from './LoadingAnimation';
 import { LoadingImage } from '../LoadingImage';
-import { StoriesThemeConfigType } from '../../types';
+import { StoriesThemeConfigType, StoryListItemType } from '../../types';
 
 export const StoryListItem = memo(
   ({
     title,
     image,
+    isViewed,
     loading,
     onPress,
     themeConfig,
-  }: {
-    title: string;
-    image: string;
+  }: StoryListItemType & {
     loading: boolean;
     onPress: (event: GestureResponderEvent) => void;
     themeConfig: StoriesThemeConfigType;
@@ -38,7 +37,6 @@ export const StoryListItem = memo(
       borderRadius: Constants.SPACING * 4,
       borderWidth: Constants.SPACING / 2,
       marginRight: Constants.SPACING * 2,
-      borderColor: 'yellow',
       padding: Constants.SPACING,
       overflow: 'hidden',
       justifyContent: 'flex-end',
@@ -64,7 +62,9 @@ export const StoryListItem = memo(
             Number(loading),
             [0, 1],
             [
-              (themeConfig.listItemStyle?.borderColor as string) || 'red',
+              isViewed
+                ? themeConfig.viewedBorderColor || 'gray'
+                : (themeConfig.listItemStyle?.borderColor as string) || 'red',
               'transparent',
             ]
           ),

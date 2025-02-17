@@ -9,6 +9,7 @@ export type StoryListItemType = {
   id: string;
   image: string;
   title: string;
+  isViewed?: boolean;
   steps: StoryStepType[];
 };
 
@@ -54,6 +55,7 @@ export type StoryNode = {
 
 export type StoriesThemeConfigType = {
   borderColor?: string;
+  viewedBorderColor?: string;
   listItemStyle?: Omit<ViewStyle, 'width' | 'height' | 'borderRadius'> & {
     width: number;
     height: number;
