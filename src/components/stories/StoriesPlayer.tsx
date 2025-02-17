@@ -34,6 +34,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { AnimatedScrollView } from 'react-native-reanimated/lib/typescript/component/ScrollView';
 import { isEqual } from 'lodash';
 import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
+import { usePreloadStoriesStepsImages } from '../../hooks';
 
 /*
  * 2. Сбрасывается шаг сторис при свайпе назад
@@ -42,10 +43,8 @@ import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
 export const StoriesPlayer = ({
   renderContent,
   onStoryStepIndexChange,
-}: {
-  renderContent: StoriesConfigType['renderContent'];
-  onStoryStepIndexChange?: StoriesConfigType['onStoryStepIndexChange'];
-}) => {
+  preloadImagesEnabled,
+}: StoriesConfigType) => {
   const { closeStories, initialStoryIndex, storiesLinkedList, storiesLength } =
     useStoriesPlayer();
   const scrollRef = useRef<AnimatedScrollView | null>(null);
@@ -120,6 +119,7 @@ export const StoriesPlayer = ({
           active={isStoryActive}
           isPaused={isPaused}
           key={item.id}
+          onProgressEnd={onRightTapRegionPress}
         />
       );
     },
@@ -157,6 +157,7 @@ export const StoriesPlayer = ({
     }
   }, [currentStepIndex, currentStoryIndex]);
 
+  usePreloadStoriesStepsImages(current, preloadImagesEnabled);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureDetector
@@ -232,6 +233,7 @@ const Item = memo(
     renderContent,
     active,
     isPaused,
+    onProgressEnd,
   }: {
     steps: StoryStepType[];
     scrollOffset: SharedValue<number>;
@@ -240,6 +242,7 @@ const Item = memo(
     renderContent: StoriesConfigType['renderContent'];
     active: boolean;
     isPaused: SharedValue<number>;
+    onProgressEnd: () => void;
   }) => {
     const progressAnimation = useSharedValue(0);
     const lastProgress = useSharedValue(0);
@@ -330,6 +333,15 @@ const Item = memo(
 
     useEffect(() => {
       lastProgress.value = 0;
+      if (active) {
+        runOnUI(() => {
+          progressAnimation.addListener(1, (value) => {
+            if (value === 100) {
+              runOnJS(onProgressEnd)();
+            }
+          });
+        })();
+      }
     }, [currentStepIndex]);
 
     return (

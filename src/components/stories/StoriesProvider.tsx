@@ -8,8 +8,6 @@ import { useStoriesAnimations } from '../../hooks';
 import { StoriesContext } from '../../config';
 import { StoriesThemeConfigType } from '../../types';
 
-const defaultRenderContent = () => null;
-
 export const StoriesProvider = memo(
   ({
     children,
@@ -70,18 +68,7 @@ export const StoriesProvider = memo(
         <GestureDetector gesture={PanGesture}>
           <AnimatedBox {...modalProps}>
             <AnimatedBox {...overlay} />
-            {playerOpened ? (
-              <StoriesPlayer
-                renderContent={
-                  playerConfig.current.renderContent || defaultRenderContent
-                }
-                onStoryStepIndexChange={
-                  playerConfig.current.onStoryStepIndexChange
-                }
-              />
-            ) : (
-              <></>
-            )}
+            {playerOpened ? <StoriesPlayer {...playerConfig.current} /> : <></>}
           </AnimatedBox>
         </GestureDetector>
         {children}

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import {
   Image,
   ImageErrorEventData,
@@ -6,7 +6,9 @@ import {
   NativeSyntheticEvent,
 } from 'react-native';
 import {
+  FadeIn,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -30,17 +32,21 @@ export const LoadingImage = memo(
     loaderHeight?: number;
   } & ImageProps) => {
     const loadingProgress = useSharedValue(0);
-
+    const [showLoader, setShowLoader] = useState(false);
     const onLoadStart = () => {
+      runOnJS(setShowLoader)(true);
       loadingProgress.value = withTiming(0, { duration: 300 });
       props.onLoadStart?.();
     };
     const onLoadEnd = () => {
-      loadingProgress.value = withTiming(1, { duration: 300 });
+      loadingProgress.value = withTiming(1, { duration: 300 }, () => {
+        runOnJS(setShowLoader)(false);
+      });
       props.onLoadEnd?.();
     };
     const onLoadError = (error: NativeSyntheticEvent<ImageErrorEventData>) => {
       props.onError?.(error);
+      runOnJS(setShowLoader)(false);
     };
 
     const loaderStyles = useAnimatedStyle(() => ({
@@ -49,17 +55,21 @@ export const LoadingImage = memo(
 
     return (
       <>
-        <AnimatedBox
-          style={[
-            {
-              position: 'absolute',
-              zIndex: 1,
-            },
-            loaderStyles,
-          ]}
-        >
-          <SkeletonLoader width={loaderWidth} height={loaderHeight} />
-        </AnimatedBox>
+        {showLoader && (
+          <AnimatedBox
+            entering={FadeIn.delay(300)}
+            style={[
+              {
+                position: 'absolute',
+                zIndex: 1,
+              },
+            ]}
+          >
+            <AnimatedBox style={[loaderStyles]}>
+              <SkeletonLoader width={loaderWidth} height={loaderHeight} />
+            </AnimatedBox>
+          </AnimatedBox>
+        )}
         <Image
           source={source}
           width={width}

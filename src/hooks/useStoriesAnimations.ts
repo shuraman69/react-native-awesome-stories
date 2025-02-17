@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import { Gesture } from 'react-native-gesture-handler';
 import {
   Easing,
+  Extrapolation,
   interpolate,
   runOnJS,
   useAnimatedStyle,
@@ -20,6 +21,7 @@ import {
 } from '../types';
 
 const EASING = Easing.bezier(0.29, 0.47, 0.22, 0.99);
+const defaultRenderContent = () => null;
 
 export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
   const [playerOpened, setPlayerOpened] = useState(false);
@@ -29,7 +31,10 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
 
   const storiesLength = useRef(0);
   const initialStoryIndex = useRef(0);
-  const playerConfig = useRef<Partial<StoriesConfigType>>({});
+  const playerConfig = useRef<StoriesConfigType>({
+    renderContent: defaultRenderContent,
+    preloadImagesEnabled: false,
+  });
   const themeConfig = useRef<StoriesThemeConfigType>(theme);
 
   async function generateLinkedObject(
@@ -87,7 +92,7 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
     const delayX = pageX >= SIZE.width / 2 - 50 ? 100 : 75;
     onOpenXY.current = { pageX, pageY };
     width.value = withTiming(SIZE.width);
-    x.value = pageX > SIZE.width * 0.9 ? pageX : pageX * 1.1;
+    x.value = pageX;
     y.value = pageY;
     y.value = withDelay(
       delayY,
@@ -107,18 +112,22 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
   };
   const closeStories = useCallback(() => {
     translateY.value = withTiming(0, {
+      duration: 500,
       easing: EASING,
     });
     y.value = withTiming(onOpenXY.current.pageY, {
       easing: EASING,
+      duration: 300,
     });
-    x.value = withTiming(onOpenXY.current.pageX + 35, {
+    x.value = withTiming(onOpenXY.current.pageX + 30, {
       easing: EASING,
+      duration: 300,
     });
     width.value = withTiming(
       0,
       {
         easing: EASING,
+        duration: 250,
       },
       () => {
         runOnJS(setPlayerOpened)(false);
@@ -169,7 +178,8 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
             scale: interpolate(
               translateY.value,
               [0, SIZE.height / 2],
-              [1, 0.7]
+              [1, 0.7],
+              Extrapolation.CLAMP
             ),
           },
         ],

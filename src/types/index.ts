@@ -43,6 +43,7 @@ export type StoriesConfigType<T = StoryStepType<any>> = {
     storyIndex: number;
     stepIndex: number;
   }) => void;
+  preloadImagesEnabled?: boolean;
 };
 
 export type StoryNode<T = {}> = {
