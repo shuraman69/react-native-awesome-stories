@@ -5,7 +5,19 @@ import { StoriesProvider } from 'react-native-awesome-stories';
 export default function App() {
   return (
     <GestureHandlerRootView>
-      <StoriesProvider>
+      <StoriesProvider
+        theme={{
+          viewedBorderColor: 'gray',
+          listItemStyle: {
+            borderRadius: 12,
+            borderWidth: 3,
+            width: 80,
+            height: 80,
+            borderColor: 'yellow',
+            paddingBottom: 0,
+          },
+        }}
+      >
         <AppEntry />
       </StoriesProvider>
     </GestureHandlerRootView>
