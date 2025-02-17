@@ -4,7 +4,6 @@ export const generateStoryData = (count = 20) => {
   return Array.from({ length: count }, (_, index) => ({
     id: faker.string.uuid(),
     image: faker.image.url(),
-    hello: '123',
     title: index % 2 === 0 ? faker.lorem.words(3) : '',
     isViewed: faker.datatype.boolean(),
     steps: Array.from({ length: faker.number.int({ min: 2, max: 5 }) }, () => ({

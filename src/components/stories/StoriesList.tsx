@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react';
-import { StoriesListProps } from '../../types';
+import { ExtractStepType, StoriesListProps } from '../../types';
 import { Constants } from '../../config';
 import { isEqual } from 'lodash';
 import { FlatList, GestureResponderEvent } from 'react-native';
@@ -7,12 +7,20 @@ import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
 import { StoryListItem } from './StoriesListItem';
 
 export const StoriesList = memo(
-  ({ stories, onStoryPress, config, flatListProps }: StoriesListProps) => {
+  <T extends any = any>({
+    stories,
+    onStoryPress,
+    config,
+    flatListProps,
+  }: StoriesListProps<
+    ExtractStepType<StoriesListProps['stories'][number]>
+  >) => {
     const { openStories, prepareStories, themeConfig } = useStoriesPlayer();
 
     const [loadingIndex, setLoadingIndex] = useState<number | undefined>(
       undefined
     );
+
     const memoizedHandlers = useMemo(
       () =>
         stories.map((item, index) => (event: GestureResponderEvent) => {
@@ -35,7 +43,7 @@ export const StoriesList = memo(
         index,
         item,
       }: {
-        item: StoriesListProps['stories'][number];
+        item: StoriesListProps<T>['stories'][number];
         index: number;
       }) => {
         return (
@@ -53,7 +61,7 @@ export const StoriesList = memo(
     );
 
     const keyExtractor = useCallback(
-      (item: StoriesListProps['stories'][number]) => String(item.id),
+      (item: StoriesListProps<T>['stories'][number]) => String(item.id),
       []
     );
 
@@ -72,4 +80,4 @@ export const StoriesList = memo(
     );
   },
   (p, n) => isEqual(p, n)
-);
+) as <T>(props: StoriesListProps<T>) => JSX.Element; // Важно добавить это приведение типов для правильной работы с generic

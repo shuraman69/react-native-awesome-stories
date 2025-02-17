@@ -1,60 +1,66 @@
 import { FlatListProps, ViewStyle } from 'react-native';
 
-export type StoryPressCallback = (
-  story: StoriesListProps['stories'][number],
+export type StoryPressCallback<T> = (
+  story: StoriesListProps<T>['stories'][number],
   index: number
 ) => Promise<void>;
 
-export type StoryListItemType = {
+export type StoryListItemType<T = {}> = {
   id: string;
   image: string;
   title: string;
   isViewed?: boolean;
-  steps: StoryStepType[];
+  steps: StoryStepType<T>[];
 };
 
-export type StoriesListProps = {
-  stories: StoryListItemType[];
-  onStoryPress?: StoryPressCallback;
-  config: StoriesConfigType;
+export type ExtractStepType<T> = T extends { steps: Array<infer S> }
+  ? S extends StoryStepType<infer U>
+    ? U
+    : never
+  : never;
+
+export type StoriesListProps<T = any> = {
+  stories: Array<StoryListItemType<T>>;
+  onStoryPress?: StoryPressCallback<T>;
+  config: StoriesConfigType<T>;
   flatListProps?: Omit<
-    FlatListProps<StoryListItemType>,
+    FlatListProps<StoryListItemType<T>>,
     'data' | 'renderItem' | 'keyExtractor'
   >;
 };
 
-export type StoryStepType = {
+export type StoryStepType<T = {}> = {
   id: string;
   image: string;
   title: string;
   duration?: number;
-};
+} & T;
 
-export type StoriesConfigType = {
-  renderContent: (item: StoryStepType) => React.ReactNode;
+export type StoriesConfigType<T = StoryStepType<any>> = {
+  renderContent: (item: StoryStepType<T>) => React.ReactNode;
   onStoryStepIndexChange?: (props: {
-    item: StoryStepType;
+    item: StoryStepType<T>;
     storyIndex: number;
     stepIndex: number;
   }) => void;
 };
 
-export type StoryNode = {
+export type StoryNode<T = {}> = {
   id: string;
   image: string;
   title: string;
-  steps: StoryStepType[];
+  steps: StoryStepType<T>[];
   prev: {
     id: string;
     image: string;
     title: string;
-    steps: StoryStepType[];
+    steps: StoryStepType<T>[];
   } | null;
   next: {
     id: string;
     image: string;
     title: string;
-    steps: StoryStepType[];
+    steps: StoryStepType<T>[];
   } | null;
 };
 
