@@ -207,7 +207,7 @@ const MemoizedScroll = memo(
 
 const { width } = SIZE;
 const perspective = width;
-const angle = Math.atan(perspective / (width / 2));
+const angle = Math.atan(perspective / (width / 1.5));
 const ratio = IS_IOS ? 2 : 1.2;
 
 const Item = memo(
@@ -315,6 +315,10 @@ const Item = memo(
       }
     }, []);
 
+    useEffect(() => {
+      lastProgress.value = 0;
+    }, [currentStepIndex]);
+
     return (
       <AnimatedBox
         style={[
@@ -323,15 +327,6 @@ const Item = memo(
           animatedStyles,
         ]}
       >
-        <Row
-          gap={Constants.SPACING}
-          paddingHorizontal={Constants.SPACING}
-          paddingTop={Constants.SPACING * 6}
-          marginTop={Constants.SPACING * 2}
-          marginBottom={Constants.SPACING * 3}
-        >
-          {renderedProgressBars}
-        </Row>
         <AnimatedBox
           style={{
             flex: 1,
@@ -339,6 +334,17 @@ const Item = memo(
             borderRadius: Constants.SPACING * 4,
           }}
         >
+          <Row
+            position={'absolute'}
+            zIndex={100}
+            gap={Constants.SPACING}
+            paddingHorizontal={Constants.SPACING}
+            paddingTop={Constants.SPACING * 3}
+            marginTop={Constants.SPACING * 2}
+            marginBottom={Constants.SPACING * 3}
+          >
+            {renderedProgressBars}
+          </Row>
           {!!image && (
             <Image
               style={StyleSheet.absoluteFill}
