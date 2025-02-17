@@ -1,4 +1,4 @@
-import { FlatListProps } from 'react-native';
+import { FlatListProps, ViewStyle } from 'react-native';
 
 export type StoryPressCallback = (
   story: StoriesListProps['stories'][number],
@@ -50,4 +50,16 @@ export type StoryNode = {
     title: string;
     steps: StoryStepType[];
   } | null;
+};
+
+export type StoriesThemeConfigType = {
+  borderColor?: string;
+  listItemStyle?: Omit<ViewStyle, 'width' | 'height' | 'borderRadius'> & {
+    width: number;
+    height: number;
+    borderRadius?: number;
+  };
+  skeletonBg?: string;
+  skeletonTintColor?: string;
+  loadingIndicatorRadius?: number;
 };

@@ -10,12 +10,21 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Rect } from 'react-native-svg';
 import { Constants } from '../../config';
+import { StoriesThemeConfigType } from '../../types';
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 
 export const LoadingAnimation = memo(
-  ({ loading }: { loading: boolean }) => {
+  ({
+    loading,
+    themeConfig,
+  }: {
+    loading: boolean;
+    themeConfig: StoriesThemeConfigType;
+  }) => {
     const progress = useSharedValue(0); // Для отслеживания прогресса анимации
+    const WIDTH = themeConfig.listItemStyle?.width || Constants.SLIDER_CARD_W;
+    const HEIGHT = themeConfig.listItemStyle?.height || Constants.SLIDER_CARD_H;
     useEffect(() => {
       if (loading) {
         progress.value = withRepeat(
@@ -42,18 +51,18 @@ export const LoadingAnimation = memo(
         style={[{ position: 'absolute', zIndex: 1000 }]}
       >
         <Svg
-          height={Constants.SLIDER_CARD_H + 2}
-          width={Constants.SLIDER_CARD_W + 4}
-          viewBox={`0 0 ${Constants.SLIDER_CARD_W} ${Constants.SLIDER_CARD_H}`}
+          height={HEIGHT + 2}
+          width={WIDTH + 4}
+          viewBox={`0 0 ${WIDTH + 1} ${HEIGHT}`}
         >
           <AnimatedRect
             x="0"
             y="1"
-            width={Constants.SLIDER_CARD_W - 3}
-            height={Constants.SLIDER_CARD_H - 5}
-            rx="12"
-            stroke={'yellow'}
-            strokeWidth="2"
+            width={WIDTH - 3}
+            height={HEIGHT - 5}
+            rx={themeConfig.listItemStyle?.borderRadius}
+            stroke={themeConfig.listItemStyle?.borderColor}
+            strokeWidth={themeConfig.listItemStyle?.borderWidth}
             strokeDasharray="20,15"
             fill="none"
             animatedProps={animatedProps}

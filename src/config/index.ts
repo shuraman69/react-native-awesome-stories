@@ -1,6 +1,6 @@
 import { Dimensions, Platform } from 'react-native';
 import React from 'react';
-import { StoriesConfigType, StoryNode } from '../types';
+import { StoriesConfigType, StoriesThemeConfigType, StoryNode } from '../types';
 
 export const SIZE = Dimensions.get('window');
 export const IS_IOS = Platform.OS === 'ios';
@@ -22,6 +22,7 @@ export const StoriesContext = React.createContext<{
   initialStoryIndex: number;
   storiesLinkedList: Record<any, StoryNode>;
   storiesLength: number;
+  themeConfig: StoriesThemeConfigType;
 }>({
   opened: false,
   openStories: () => {},
@@ -30,4 +31,5 @@ export const StoriesContext = React.createContext<{
   initialStoryIndex: 0,
   storiesLinkedList: {},
   storiesLength: 0,
+  themeConfig: {},
 });

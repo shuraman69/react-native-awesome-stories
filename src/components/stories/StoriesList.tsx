@@ -8,7 +8,7 @@ import { StoryListItem } from './StoriesListItem';
 
 export const StoriesList = memo(
   ({ stories, onStoryPress, config, flatListProps }: StoriesListProps) => {
-    const { openStories, prepareStories } = useStoriesPlayer();
+    const { openStories, prepareStories, themeConfig } = useStoriesPlayer();
 
     const [loadingIndex, setLoadingIndex] = useState<number | undefined>(
       undefined
@@ -38,7 +38,6 @@ export const StoriesList = memo(
         item: StoriesListProps['stories'][number];
         index: number;
       }) => {
-        // return <Text style={{ color: '#fff' }}>{item.title}</Text>;
         return (
           <StoryListItem
             {...item}
@@ -46,6 +45,7 @@ export const StoriesList = memo(
             onPress={
               memoizedHandlers[index] as (event: GestureResponderEvent) => void
             }
+            themeConfig={themeConfig}
           />
         );
       },

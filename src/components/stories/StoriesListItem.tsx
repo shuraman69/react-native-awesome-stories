@@ -16,6 +16,7 @@ import { AnimatedBox, Box } from '../Box';
 import { Text } from '../Text';
 import { LoadingAnimation } from './LoadingAnimation';
 import { LoadingImage } from '../LoadingImage';
+import { StoriesThemeConfigType } from '../../types';
 
 export const StoryListItem = memo(
   ({
@@ -23,11 +24,13 @@ export const StoryListItem = memo(
     image,
     loading,
     onPress,
+    themeConfig,
   }: {
     title: string;
     image: string;
     loading: boolean;
     onPress: (event: GestureResponderEvent) => void;
+    themeConfig: StoriesThemeConfigType;
   }) => {
     const containerProps = getStyleProps<typeof Box>({
       width: Constants.SLIDER_CARD_W,
@@ -39,11 +42,14 @@ export const StoryListItem = memo(
       padding: Constants.SPACING,
       overflow: 'hidden',
       justifyContent: 'flex-end',
+      ...themeConfig.listItemStyle,
     });
     const styles = StyleSheet.create({
       image: {
         ...StyleSheet.absoluteFillObject,
-        borderRadius: Constants.SPACING * 3,
+        borderRadius:
+          ((themeConfig.listItemStyle?.borderRadius as number) || 4) - 4 ||
+          Constants.SPACING * 3,
         margin: Constants.SPACING / 2,
       },
       gradient: {
@@ -54,7 +60,14 @@ export const StoryListItem = memo(
     const borderAnimation = useAnimatedStyle(() => {
       return {
         borderColor: withTiming(
-          interpolateColor(Number(loading), [0, 1], ['yellow', 'transparent']),
+          interpolateColor(
+            Number(loading),
+            [0, 1],
+            [
+              (themeConfig.listItemStyle?.borderColor as string) || 'red',
+              'transparent',
+            ]
+          ),
           {
             duration: 500,
           }
@@ -65,31 +78,32 @@ export const StoryListItem = memo(
     return (
       <AnimatedBox>
         <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
-          {loading && <LoadingAnimation loading={loading} />}
+          {loading && (
+            <LoadingAnimation loading={loading} themeConfig={themeConfig} />
+          )}
           <AnimatedBox style={borderAnimation} {...containerProps}>
             {image ? (
               <LoadingImage
                 style={styles.image}
                 source={{ uri: image, cache: 'force-cache' }}
-                loaderWidth={Constants.SLIDER_CARD_W}
-                loaderHeight={Constants.SLIDER_CARD_H}
+                loaderWidth={
+                  themeConfig.listItemStyle?.width || Constants.SLIDER_CARD_W
+                }
+                loaderHeight={
+                  themeConfig.listItemStyle?.height || Constants.SLIDER_CARD_H
+                }
               />
             ) : (
               <></>
             )}
-            {/*<LinearGradient*/}
-            {/*  start={{ x: 0.5, y: 1 }}*/}
-            {/*  end={{ x: 0.5, y: 0 }}*/}
-            {/*  style={styles.gradient}*/}
-            {/*  colors={[*/}
-            {/*    theme.colors.backgroundPrimary,*/}
-            {/*    theme.colors.transparent,*/}
-            {/*  ]}*/}
-            {/*/>*/}
             <Text
+              color={'#fff'}
               fontWeight={'500'}
               marginBottom={Constants.SPACING}
               marginLeft={Constants.SPACING}
+              shadowOpacity={1}
+              shadowColor={'#000'}
+              shadowOffset={{ width: 0, height: 2 }}
             >
               {title}
             </Text>

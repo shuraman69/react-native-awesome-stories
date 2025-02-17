@@ -12,18 +12,25 @@ import {
 } from 'react-native-reanimated';
 import { SIZE } from '../config';
 import { DefaultStyle } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
-import { StoriesConfigType, StoryNode, StoryStepType } from '../types';
+import {
+  StoriesConfigType,
+  StoriesThemeConfigType,
+  StoryNode,
+  StoryStepType,
+} from '../types';
 
 const EASING = Easing.bezier(0.29, 0.47, 0.22, 0.99);
 
-export const useStoriesAnimations = () => {
+export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
   const [playerOpened, setPlayerOpened] = useState(false);
-  const storiesLength = useRef(0);
   const [storiesLinkedList, setStoriesLinkedList] = useState<
     Record<any, StoryNode>
   >({});
+
+  const storiesLength = useRef(0);
   const initialStoryIndex = useRef(0);
   const playerConfig = useRef<Partial<StoriesConfigType>>({});
+  const themeConfig = useRef<StoriesThemeConfigType>(theme);
 
   async function generateLinkedObject(
     array: {
@@ -183,5 +190,6 @@ export const useStoriesAnimations = () => {
     prepareStories,
     playerConfig,
     PanGesture,
+    themeConfig,
   };
 };
