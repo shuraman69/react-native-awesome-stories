@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { isEqual } from 'lodash';
 import {
+  FadeIn,
   interpolateColor,
   useAnimatedStyle,
   withTiming,
@@ -76,7 +77,7 @@ export const StoryListItem = memo(
     }, [loading]);
 
     return (
-      <AnimatedBox>
+      <AnimatedBox entering={FadeIn}>
         <TouchableOpacity activeOpacity={0.6} onPress={onPress}>
           {loading && (
             <LoadingAnimation loading={loading} themeConfig={themeConfig} />
@@ -96,17 +97,19 @@ export const StoryListItem = memo(
             ) : (
               <></>
             )}
-            <Text
-              color={'#fff'}
-              fontWeight={'500'}
-              marginBottom={Constants.SPACING}
-              marginLeft={Constants.SPACING}
-              shadowOpacity={1}
-              shadowColor={'#000'}
-              shadowOffset={{ width: 0, height: 2 }}
-            >
-              {title}
-            </Text>
+            {!!title && (
+              <Text
+                color={'#fff'}
+                fontWeight={'500'}
+                marginBottom={Constants.SPACING}
+                marginLeft={Constants.SPACING}
+                shadowOpacity={1}
+                shadowColor={'#000'}
+                shadowOffset={{ width: 0, height: 2 }}
+              >
+                {title}
+              </Text>
+            )}
           </AnimatedBox>
         </TouchableOpacity>
       </AnimatedBox>
