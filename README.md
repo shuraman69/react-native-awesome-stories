@@ -185,6 +185,40 @@ export type StoryStepType<T = {}> = {
 This type system allows you to manage and extend story data flexibly, making it easy to integrate into different use cases.
 This allows for full customization of the story list's appearance, ensuring a seamless integration with your app's design.
 
+## `StoriesList` Props
+
+| Prop           | Type                        | Description                                                                                                                                                                                              |
+|----------------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `stories`      | `Array<StoryListItemType<T>>` | An array of `\StoryListItemType\` objects containing the data to be displayed in the story list. Each element represents a single story.                                                                 |
+| `onStoryPress` | `StoryPressCallback`        | A callback function that is called when a story item is pressed. It receives the data of the story that was clicked. **You can use this to perform asynchronous operations, such as preloading images.** |
+| `config`       | `StoriesConfigType<T>`      | A configuration object for the story list. It is used to customize the display of stories, such as the number of items per screen, scroll behavior, and other parameters.                                |
+| `flatListProps` | `FlatList component props`  | Additional props for the `FlatList` component. All props from `FlatListProps`, except for `data`, `renderItem`, and `keyExtractor`, can be passed to customize the behavior and appearance of the list.  |
+
+### Image prefetch example
+```tsx
+const stories = [
+  // your stories
+];
+
+<StoriesList
+  stories={stories}
+  onStoryPress={async (item) => {
+    const promises = item.steps.map((step) => new Promise(async (resolve) => {
+      await Image.prefetch(step.image);
+      resolve(true);
+    }));
+    await Promise.all(promises);
+  }}
+/>
+```
+
+## `StoriesConfigType<T>` Type
+
+| Prop                     | Type                                                                                  | Description                                                                                                                                                                    |
+|--------------------------|---------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `renderContent`          | `(item: StoryStepType<T>) => React.ReactNode`                                         | A function that renders the content for each story step. It receives a `StoryStepType` object as an argument and returns a React node to display.                              |
+| `onStoryStepIndexChange` | `(props: { item: StoryStepType<T>; storyIndex: number; stepIndex: number; }) => void` | An optional callback function that is called when the story step index changes. It receives the updated story and step indices, as well as the current story step item.        |
+| `preloadImagesEnabled`   | `boolean / undefined`                                                                 | An optional flag that determines whether images should be preloaded for the story steps. If enabled, images may load faster when the user reaches that part of the story. *Preloads the images of the neighboring story steps.* |
 
 
 ## Contributing
