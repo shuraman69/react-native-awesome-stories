@@ -36,20 +36,21 @@ import { isEqual } from 'lodash';
 import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
 import { usePreloadStoriesStepsImages } from '../../hooks';
 
-/*
- * 2. Сбрасывается шаг сторис при свайпе назад
- * */
-
 export const StoriesPlayer = ({
   renderContent,
   onStoryStepIndexChange,
   preloadImagesEnabled,
 }: StoriesConfigType) => {
-  const { closeStories, initialStoryIndex, storiesLinkedList, storiesLength } =
-    useStoriesPlayer();
+  const {
+    closeStories,
+    initialStoryIndex,
+    initialStepIndex,
+    storiesLinkedList,
+    storiesLength,
+  } = useStoriesPlayer();
   const scrollRef = useRef<AnimatedScrollView | null>(null);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(initialStoryIndex);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [currentStepIndex, setCurrentStepIndex] = useState(initialStepIndex);
 
   const current = storiesLinkedList[currentStoryIndex];
   const prev = storiesLinkedList[currentStoryIndex]?.prev;

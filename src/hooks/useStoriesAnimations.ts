@@ -14,6 +14,7 @@ import {
 import { SIZE } from '../config';
 import { DefaultStyle } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
 import {
+  PrepareStoriesCbArgs,
   StoriesConfigType,
   StoriesThemeConfigType,
   StoryNode,
@@ -31,6 +32,7 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
 
   const storiesLength = useRef(0);
   const initialStoryIndex = useRef(0);
+  const initialStoryStepIndex = useRef(0);
   const playerConfig = useRef<StoriesConfigType>({
     renderContent: defaultRenderContent,
     preloadImagesEnabled: false,
@@ -70,18 +72,22 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
 
   const prepareStories = useCallback(
     async ({
-      stories,
-      openIndex,
+      stories = [],
+      storyIndex = 0,
+      stepIndex = 0,
       config,
-    }: {
-      stories: any[];
-      openIndex: number;
-      config: StoriesConfigType;
-    }) => {
-      playerConfig.current = config;
-      storiesLength.current = stories.length;
-      initialStoryIndex.current = openIndex;
-      await generateLinkedObject(stories);
+    }: PrepareStoriesCbArgs) => {
+      initialStoryIndex.current = storyIndex;
+      initialStoryStepIndex.current = stepIndex;
+      if (config) {
+        playerConfig.current = config;
+      }
+      if (stories.length > 0) {
+        storiesLength.current = stories.length;
+      }
+      if (stories.length > 0) {
+        await generateLinkedObject(stories);
+      }
     },
     []
   );
@@ -188,10 +194,12 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
   const overlayAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(translateY.value, [0, SIZE.height / 2], [1, 0]),
   }));
+
   return {
     storiesLength,
     storiesLinkedList,
     initialStoryIndex,
+    initialStoryStepIndex,
     playerOpened,
     animatedStyle,
     overlayAnimatedStyle,

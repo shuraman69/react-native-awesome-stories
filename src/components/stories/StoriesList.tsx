@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { ExtractStepType, StoriesListProps } from '../../types';
 import { Constants } from '../../config';
 import { isEqual } from 'lodash';
@@ -27,7 +27,7 @@ export const StoriesList = memo(
           event.target.measure(async (_, __, ___, ____, pageX, pageY) => {
             setLoadingIndex(index);
             await onStoryPress?.(item, index);
-            prepareStories({ stories, config, openIndex: index });
+            prepareStories({ storyIndex: index });
             setLoadingIndex(undefined);
             openStories({
               pageX,
@@ -64,6 +64,10 @@ export const StoriesList = memo(
       (item: StoriesListProps<T>['stories'][number]) => String(item.id),
       []
     );
+
+    useEffect(() => {
+      prepareStories({ stories, config });
+    }, [stories, config]);
 
     return (
       <FlatList

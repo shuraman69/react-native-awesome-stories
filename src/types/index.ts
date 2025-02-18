@@ -77,3 +77,10 @@ export type StoriesThemeConfigType = {
   skeletonTintColor?: string;
   loadingIndicatorRadius?: number;
 };
+
+export type PrepareStoriesCbArgs = {
+  stories?: StoryListItemType[];
+  storyIndex?: number;
+  stepIndex?: number;
+  config?: StoriesConfigType;
+};

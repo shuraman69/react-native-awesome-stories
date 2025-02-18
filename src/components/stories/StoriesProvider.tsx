@@ -5,8 +5,8 @@ import { StoriesPlayer } from './StoriesPlayer';
 import { AnimatedBox } from '../Box';
 import { getStyleProps } from '../../utils';
 import { useStoriesAnimations } from '../../hooks';
-import { StoriesContext } from '../../config';
-import { StoriesThemeConfigType } from '../../types';
+import { SIZE, StoriesContext, StoriesControllerContext } from '../../config';
+import { PrepareStoriesCbArgs, StoriesThemeConfigType } from '../../types';
 
 export const StoriesProvider = memo(
   ({
@@ -18,6 +18,7 @@ export const StoriesProvider = memo(
       storiesLinkedList,
       playerOpened,
       initialStoryIndex,
+      initialStoryStepIndex,
       openStories,
       prepareStories,
       closeStories,
@@ -35,9 +36,22 @@ export const StoriesProvider = memo(
         closeStories,
         prepareStories,
         initialStoryIndex: initialStoryIndex.current,
+        initialStepIndex: initialStoryStepIndex.current,
         storiesLinkedList,
         storiesLength: storiesLength.current,
         themeConfig: themeConfig.current,
+      }),
+      [playerOpened]
+    );
+
+    const controllerContextValue = useMemo(
+      () => ({
+        isPlayerOpened: playerOpened,
+        openPlayer: async (args: PrepareStoriesCbArgs) => {
+          await prepareStories(args);
+          openStories({ pageX: SIZE.width / 2, pageY: SIZE.height / 2 });
+        },
+        closePlayer: closeStories,
       }),
       [playerOpened]
     );
@@ -65,13 +79,19 @@ export const StoriesProvider = memo(
 
     return (
       <StoriesContext.Provider value={contextValue}>
-        <GestureDetector gesture={PanGesture}>
-          <AnimatedBox {...modalProps}>
-            <AnimatedBox {...overlay} />
-            {playerOpened ? <StoriesPlayer {...playerConfig.current} /> : <></>}
-          </AnimatedBox>
-        </GestureDetector>
-        {children}
+        <StoriesControllerContext.Provider value={controllerContextValue}>
+          <GestureDetector gesture={PanGesture}>
+            <AnimatedBox {...modalProps}>
+              <AnimatedBox {...overlay} />
+              {playerOpened ? (
+                <StoriesPlayer {...playerConfig.current} />
+              ) : (
+                <></>
+              )}
+            </AnimatedBox>
+          </GestureDetector>
+          {children}
+        </StoriesControllerContext.Provider>
       </StoriesContext.Provider>
     );
   }

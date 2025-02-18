@@ -1,6 +1,11 @@
 import { Dimensions, Platform } from 'react-native';
 import React from 'react';
-import { StoriesConfigType, StoriesThemeConfigType, StoryNode } from '../types';
+import {
+  PrepareStoriesCbArgs,
+  StoriesConfigType,
+  StoriesThemeConfigType,
+  StoryNode,
+} from '../types';
 
 export const SIZE = Dimensions.get('window');
 export const IS_IOS = Platform.OS === 'ios';
@@ -13,13 +18,10 @@ export const Constants = {
 export const StoriesContext = React.createContext<{
   opened: boolean;
   openStories: ({}: { pageX: number; pageY: number }) => void;
-  prepareStories: ({}: {
-    stories: any[];
-    openIndex: number;
-    config: StoriesConfigType;
-  }) => void;
+  prepareStories: ({}: PrepareStoriesCbArgs) => void;
   closeStories: () => void;
   initialStoryIndex: number;
+  initialStepIndex: number;
   storiesLinkedList: Record<any, StoryNode>;
   storiesLength: number;
   themeConfig: StoriesThemeConfigType;
@@ -29,7 +31,23 @@ export const StoriesContext = React.createContext<{
   closeStories: () => {},
   prepareStories: () => {},
   initialStoryIndex: 0,
+  initialStepIndex: 0,
   storiesLinkedList: {},
   storiesLength: 0,
   themeConfig: {},
+});
+
+export const StoriesControllerContext = React.createContext<{
+  isPlayerOpened: boolean;
+  openPlayer: ({}: {
+    stories?: any[];
+    storyIndex?: number;
+    stepIndex?: number;
+    config?: StoriesConfigType;
+  }) => Promise<void>;
+  closePlayer: () => void;
+}>({
+  isPlayerOpened: false,
+  openPlayer: async () => {},
+  closePlayer: () => {},
 });
