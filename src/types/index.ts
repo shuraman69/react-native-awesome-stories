@@ -75,7 +75,6 @@ export type StoriesThemeConfigType = {
   };
   skeletonBg?: string;
   skeletonTintColor?: string;
-  loadingIndicatorRadius?: number;
 };
 
 export type PrepareStoriesCbArgs = {
