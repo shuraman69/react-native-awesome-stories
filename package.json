@@ -47,12 +47,34 @@
   },
   "keywords": [
     "react-native",
+    "stories",
+    "story-list",
+    "animations",
+    "gestures",
+    "react-native-stories",
+    "react-native",
+    "react component",
+    "react native component",
+    "react",
+    "react native",
+    "mobile",
     "ios",
-    "android"
+    "android",
+    "ui",
+    "story",
+    "stories",
+    "status",
+    "Whatsapp",
+    "Telegram",
+    "Instagram",
+    "cross platform",
+    "cross-platform",
+    "typescript",
+    "hooks"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shuraman69/react-native-awesome-stories.git"
+    "url": "https://github.com/shuraman69/react-native-awesome-stories.git"
   },
   "author": "shuraman69 <a.fateev@yandex.ru> (https://github.com/shuraman69)",
   "license": "MIT",
