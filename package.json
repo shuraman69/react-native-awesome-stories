@@ -1,6 +1,6 @@
 {
   "name": "react-native-awesome-stories",
-  "version": "0.1.0-alpha",
+  "version": "0.1.1-alpha",
   "description": "A fast and optimized library for rendering stories with smooth animations and gestures. Supports story lists and an integrated player with full customization.",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -43,7 +43,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli lib",
     "prepare": "bob build",
-    "release": "release-it"
+    "release": "release-it",
+    "updateYalc": "yarn prepare && yalc push"
   },
   "keywords": [
     "react-native",
@@ -104,6 +105,7 @@
     "react-native-builder-bob": "^0.37.0",
     "react-native-gesture-handler": "^2.23.1",
     "react-native-reanimated": "^3.16.7",
+    "react-native-safe-area-context": "^5.2.0",
     "react-native-svg": "^15.11.1",
     "release-it": "^17.10.0",
     "typescript": "5.0.2"
@@ -116,6 +118,7 @@
     "react-native": "*",
     "react-native-gesture-handler": ">=2.10.0",
     "react-native-reanimated": ">=2.12.0",
+    "react-native-safe-area-context": ">=4.0.0",
     "react-native-svg": "*"
   },
   "packageManager": "yarn@3.6.1",

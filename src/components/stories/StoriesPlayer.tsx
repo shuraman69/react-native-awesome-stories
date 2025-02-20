@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Image, SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { AnimatedBox, Box } from '../Box';
 import { Row } from '../Row';
 import { Constants, IS_IOS, SIZE } from '../../config';
@@ -17,6 +17,7 @@ import Animated, {
   cancelAnimation,
   Easing,
   Extrapolation,
+  FadeIn,
   interpolate,
   runOnJS,
   runOnUI,
@@ -35,6 +36,7 @@ import { AnimatedScrollView } from 'react-native-reanimated/lib/typescript/compo
 import { isEqual } from 'lodash';
 import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
 import { usePreloadStoriesStepsImages } from '../../hooks';
+import { SafeAreaWrapper } from '../SafeAreaWrapper';
 
 export const StoriesPlayer = ({
   renderContent,
@@ -160,7 +162,7 @@ export const StoriesPlayer = ({
 
   usePreloadStoriesStepsImages(current, preloadImagesEnabled);
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaWrapper styles={{ flex: 1 }}>
       <GestureDetector
         gesture={Gesture.Simultaneous(
           Gesture.Tap().onEnd((event) => {
@@ -191,7 +193,7 @@ export const StoriesPlayer = ({
           />
         </Box>
       </GestureDetector>
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
@@ -372,7 +374,8 @@ const Item = memo(
             {renderedProgressBars}
           </Row>
           {!!image && (
-            <Image
+            <Animated.Image
+              entering={FadeIn.delay(100)}
               style={StyleSheet.absoluteFill}
               source={{ uri: image, cache: 'force-cache' }}
             />
