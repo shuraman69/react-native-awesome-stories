@@ -35,7 +35,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { AnimatedScrollView } from 'react-native-reanimated/lib/typescript/component/ScrollView';
 import { isEqual } from 'lodash';
 import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
-import { usePreloadStoriesStepsImages } from '../../hooks';
+import { usePreloadStoriesStepsImages } from '../../hooks/usePreloadStoriesStepsImages';
 import { SafeAreaWrapper } from '../SafeAreaWrapper';
 
 export const StoriesPlayer = ({

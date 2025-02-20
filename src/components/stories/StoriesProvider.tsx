@@ -4,7 +4,7 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import { StoriesPlayer } from './StoriesPlayer';
 import { AnimatedBox } from '../Box';
 import { getStyleProps } from '../../utils';
-import { useStoriesAnimations } from '../../hooks';
+import { useStoriesAnimations } from '../../hooks/useStoriesAnimations';
 import { SIZE, StoriesContext, StoriesControllerContext } from '../../config';
 import { PrepareStoriesCbArgs, StoriesThemeConfigType } from '../../types';
 
