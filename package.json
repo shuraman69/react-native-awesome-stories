@@ -121,6 +121,10 @@
     "react-native-safe-area-context": ">=4.0.0",
     "react-native-svg": "*"
   },
+  "workspaces": [
+    "example",
+    "*"
+  ],
   "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",

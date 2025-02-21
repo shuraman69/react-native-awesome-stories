@@ -36,7 +36,7 @@ import { AnimatedScrollView } from 'react-native-reanimated/lib/typescript/compo
 import { isEqual } from 'lodash';
 import { useStoriesPlayer } from '../../hooks/useStoriesPlayer';
 import { usePreloadStoriesStepsImages } from '../../hooks/usePreloadStoriesStepsImages';
-import { SafeAreaWrapper } from '../SafeAreaWrapper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const StoriesPlayer = ({
   renderContent,
@@ -162,38 +162,36 @@ export const StoriesPlayer = ({
 
   usePreloadStoriesStepsImages(current, preloadImagesEnabled);
   return (
-    <SafeAreaWrapper styles={{ flex: 1 }}>
-      <GestureDetector
-        gesture={Gesture.Simultaneous(
-          Gesture.Tap().onEnd((event) => {
-            if (event.x < SIZE.width / 2) {
-              runOnJS(onLeftTapRegionPress)();
-            } else {
-              runOnJS(onRightTapRegionPress)();
-            }
-          }),
-          Gesture.LongPress()
-            .minDuration(150)
-            .onStart(() => {
-              isPaused.value = 1;
-            })
-            .onEnd(() => {
-              isPaused.value = 0;
-            })
-        )}
-      >
-        <Box flex={1}>
-          {prev && renderItem(prev, currentStoryIndex - 1)}
-          {current && renderItem(current, currentStoryIndex)}
-          {next && renderItem(next, currentStoryIndex + 1)}
-          <MemoizedScroll
-            itemsCount={storiesLength}
-            scrollRef={scrollRef}
-            scrollHandler={scrollHandler}
-          />
-        </Box>
-      </GestureDetector>
-    </SafeAreaWrapper>
+    <GestureDetector
+      gesture={Gesture.Simultaneous(
+        Gesture.Tap().onEnd((event) => {
+          if (event.x < SIZE.width / 2) {
+            runOnJS(onLeftTapRegionPress)();
+          } else {
+            runOnJS(onRightTapRegionPress)();
+          }
+        }),
+        Gesture.LongPress()
+          .minDuration(150)
+          .onStart(() => {
+            isPaused.value = 1;
+          })
+          .onEnd(() => {
+            isPaused.value = 0;
+          })
+      )}
+    >
+      <Box flex={1}>
+        {prev && renderItem(prev, currentStoryIndex - 1)}
+        {current && renderItem(current, currentStoryIndex)}
+        {next && renderItem(next, currentStoryIndex + 1)}
+        <MemoizedScroll
+          itemsCount={storiesLength}
+          scrollRef={scrollRef}
+          scrollHandler={scrollHandler}
+        />
+      </Box>
+    </GestureDetector>
   );
 };
 
@@ -347,10 +345,16 @@ const Item = memo(
       }
     }, [currentStepIndex]);
 
+    const safeAreaInsets = useSafeAreaInsets();
+
     return (
       <AnimatedBox
         style={[
-          { flex: 1, backgroundColor: 'transparent', width: SIZE.width },
+          {
+            flex: 1,
+            backgroundColor: 'transparent',
+            width: SIZE.width,
+          },
           StyleSheet.absoluteFill,
           animatedStyles,
         ]}
@@ -367,15 +371,13 @@ const Item = memo(
             zIndex={100}
             gap={Constants.SPACING}
             paddingHorizontal={Constants.SPACING}
-            paddingTop={Constants.SPACING * 3}
-            marginTop={Constants.SPACING * 2}
-            marginBottom={Constants.SPACING * 3}
+            paddingTop={Math.max(safeAreaInsets.top, Constants.SPACING * 3)}
           >
             {renderedProgressBars}
           </Row>
           {!!image && (
             <Animated.Image
-              entering={FadeIn.delay(100)}
+              entering={FadeIn.delay(180)}
               style={StyleSheet.absoluteFill}
               source={{ uri: image, cache: 'force-cache' }}
             />

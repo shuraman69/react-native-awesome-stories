@@ -8,11 +8,9 @@ import {
   useAnimatedStyle,
   useSharedValue,
   withDecay,
-  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 import { SIZE } from '../config';
-import { DefaultStyle } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
 import {
   PrepareStoriesCbArgs,
   StoriesConfigType,
@@ -63,10 +61,7 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
     });
   }
 
-  const onOpenXY = useRef({ pageX: 0, pageY: 0 });
-  const width = useSharedValue(0);
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
+  const onOpenXY = useSharedValue({ pageX: 0, pageY: 0 });
   const scale = useSharedValue(0.5);
   const translateY = useSharedValue(0);
 
@@ -91,54 +86,36 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
     },
     []
   );
+
+  const openAnimationProgress = useSharedValue(0);
+
   const openStories = ({ pageX, pageY }: { pageX: number; pageY: number }) => {
     setPlayerOpened(true);
-    const duration = 300;
-    const delayY = pageX >= SIZE.width / 2 - 50 ? 100 : 50;
-    const delayX = pageX >= SIZE.width / 2 - 50 ? 100 : 75;
-    onOpenXY.current = { pageX, pageY };
-    width.value = withTiming(SIZE.width);
-    x.value = pageX;
-    y.value = pageY;
-    y.value = withDelay(
-      delayY,
-      withTiming(0, {
-        easing: EASING,
-        duration,
-      })
-    );
-
-    x.value = withDelay(
-      delayX,
-      withTiming(0, {
-        easing: EASING,
-        duration,
-      })
-    );
+    const duration = 420;
+    onOpenXY.value = {
+      pageX: pageX + (themeConfig.current.listItemStyle?.width || 0) / 2,
+      pageY,
+    };
+    openAnimationProgress.value = withTiming(100, {
+      easing: EASING,
+      duration,
+    });
   };
   const closeStories = useCallback(() => {
-    translateY.value = withTiming(0, {
-      duration: 500,
-      easing: EASING,
-    });
-    y.value = withTiming(onOpenXY.current.pageY, {
-      easing: EASING,
-      duration: 300,
-    });
-    x.value = withTiming(onOpenXY.current.pageX + 30, {
-      easing: EASING,
-      duration: 300,
-    });
-    width.value = withTiming(
+    openAnimationProgress.value = withTiming(
       0,
       {
         easing: EASING,
-        duration: 250,
+        duration: 350,
       },
       () => {
         runOnJS(setPlayerOpened)(false);
       }
     );
+    translateY.value = withTiming(0, {
+      duration: 350,
+      easing: EASING,
+    });
   }, []);
 
   const PanGesture = Gesture.Pan()
@@ -165,32 +142,47 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
       }
     });
 
-  const animatedStyle = useAnimatedStyle(
-    () =>
-      ({
-        width: width.value,
-        maxHeight: interpolate(width.value, [0, SIZE.width], [0, SIZE.height]),
-        top: y.value,
-        left: x.value,
-        opacity: interpolate(width.value, [0, 10, SIZE.width], [0, 0, 1]),
-        borderRadius: interpolate(
-          width.value,
-          [0, SIZE.width * 1.2, SIZE.width],
-          [24, 24, 0]
-        ),
-        transform: [
-          { translateY: translateY.value },
-          {
-            scale: interpolate(
-              translateY.value,
-              [0, SIZE.height / 2],
-              [1, 0.7],
-              Extrapolation.CLAMP
-            ),
-          },
-        ],
-      }) as DefaultStyle
-  );
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      width: interpolate(
+        openAnimationProgress.value,
+        [0, 20, 100],
+        [0, 50, SIZE.width]
+      ),
+      maxHeight: interpolate(
+        openAnimationProgress.value,
+        [0, 100],
+        [0, SIZE.height]
+      ),
+      top: interpolate(
+        openAnimationProgress.value,
+        [0, 60, 100],
+        [onOpenXY.value.pageY, SIZE.height / 3, 0]
+      ),
+      left: interpolate(
+        openAnimationProgress.value,
+        [0, 60, 100],
+        [onOpenXY.value.pageX, SIZE.width / 4, 0]
+      ),
+      opacity: interpolate(
+        openAnimationProgress.value,
+        [0, 5, 80, 100],
+        [0, 0.1, 0.5, 1]
+      ),
+      borderRadius: 24,
+      transform: [
+        { translateY: translateY.value },
+        {
+          scale: interpolate(
+            translateY.value,
+            [0, SIZE.height / 2],
+            [1, 0.7],
+            Extrapolation.CLAMP
+          ),
+        },
+      ],
+    };
+  });
   const overlayAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(translateY.value, [0, SIZE.height / 2], [1, 0]),
   }));
