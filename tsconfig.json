@@ -12,7 +12,7 @@
     "lib": ["ESNext"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "noEmit": true,
+    "noEmit": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "noImplicitUseStrict": false,
@@ -25,6 +25,9 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "declaration": true,
+    "declarationDir": "./lib/typescript",
+    "emitDeclarationOnly": true
   }
 }
