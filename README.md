@@ -8,6 +8,10 @@ A fast and optimized library for rendering stories with smooth animations and ge
 npm install react-native-awesome-stories
 ```
 
+```sh
+yarn add react-native-awesome-stories
+```
+
 ## Peer Dependencies
 
 This library requires the following peer dependencies to be installed in your project:
