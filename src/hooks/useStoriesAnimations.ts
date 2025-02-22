@@ -199,7 +199,7 @@ export const useStoriesAnimations = (theme: StoriesThemeConfigType) => {
     closeStories,
     prepareStories,
     playerConfig,
-    PanGesture,
+    PanGesture: PanGesture as any,
     themeConfig,
   };
 };

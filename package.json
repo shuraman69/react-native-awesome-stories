@@ -1,6 +1,6 @@
 {
   "name": "react-native-awesome-stories",
-  "version": "0.1.3-alpha",
+  "version": "0.1.9-alpha",
   "description": "A fast and optimized library for rendering stories with smooth animations and gestures. Supports story lists and an integrated player with full customization.",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -14,8 +14,9 @@
     }
   },
   "files": [
-    "src",
-    "lib",
+    "lib/commonjs",
+    "lib/module",
+    "lib/typescript",
     "android",
     "ios",
     "cpp",
