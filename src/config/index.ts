@@ -4,6 +4,7 @@ import {
   PrepareStoriesCbArgs,
   StoriesConfigType,
   StoriesThemeConfigType,
+  StoryListItemType,
   StoryNode,
 } from '../types';
 
@@ -40,7 +41,7 @@ export const StoriesContext = React.createContext<{
 export const StoriesControllerContext = React.createContext<{
   isPlayerOpened: boolean;
   openPlayer: ({}: {
-    stories?: any[];
+    stories?: StoryListItemType[];
     storyIndex?: number;
     stepIndex?: number;
     config?: StoriesConfigType;
